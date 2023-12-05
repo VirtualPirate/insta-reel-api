@@ -1,0 +1,16 @@
+{
+  "name": "insta-reel-api",
+  "version": "1.0.0",
+  "description": "This is the API that parses Instagram reels url and gives you the direct download link",
+  "main": "src/index.mjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/index.mjs"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.12",
+    "puppeteer": "^21.5.2"
+  }
+}
