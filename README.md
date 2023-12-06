@@ -19,7 +19,7 @@ https://github.com/VirtualPirate/OpenGraph-API
 ```javascript
 import axios from "axios";
 
-const API_URL = "http://localhost:8080/";
+const API_URL = "http://localhost:8080";
 const video_url = "https://www.instagram.com/reel/C0djb2Yow4C/";
 
 try {
