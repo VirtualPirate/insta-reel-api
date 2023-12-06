@@ -44,18 +44,11 @@ export async function getReelVideo(url) {
 }
 
 export async function cacheReelInfo(url) {
+  console.log(`[PROCESSING]: ${url}`);
   const clean_url = removeQueryFromUrl(url);
 
   let ReelInfo = undefined;
   const ReelData = await ReelCache.findOne({ url: clean_url });
-
-  const ogAPIReqUrl =
-    `${process.env.OPEN_GRAPH_API_URL}?` +
-    new URLSearchParams({
-      url: clean_url,
-    });
-
-  console.log("OGURL:", ogAPIReqUrl);
 
   const reelOpenGraph = await (
     await fetch(
