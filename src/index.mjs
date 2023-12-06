@@ -20,7 +20,7 @@ app.get("/", async (req, res) => {
   res.send(info);
 });
 
-app.get("/ping", () => {
+app.get("/ping", (req, res) => {
   res.send({ health: "fine" });
 });
 
