@@ -1,4 +1,4 @@
-import { getReelVideo } from "./parser/insta-reel.parser.mjs";
+import { cacheReelInfo } from "./parser/insta-reel.parser.mjs";
 
 import express from "express";
 import cors from "cors";
@@ -15,23 +15,18 @@ app.use(cors({ origin: "*" }));
 
 app.get("/", async (req, res) => {
   const url = req.query.url;
-  // const info = await
+  const info = await cacheReelInfo(url);
+  console.log(`[GET] ${url}`);
+  res.send(info);
 });
 
 async function startServer() {
-  mongoose.connect(
-    process.env.MONGO_DATABASE_URL,
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    },
-    () => {
-      console.log("Connected to Database");
-      app.listen(PORT, () => {
-        console.log(`Listenning on PORT ${PORT}`);
-      });
-    }
-  );
+  mongoose.connect(process.env.MONGO_DATABASE_URL).then(() => {
+    console.log("Connected to Database");
+    app.listen(PORT, () => {
+      console.log(`Listenning on PORT ${PORT}`);
+    });
+  });
 }
 
 await startServer();

@@ -1,5 +1,7 @@
 import puppeteer from "puppeteer";
 import * as cheerio from "cheerio";
+import removeQueryFromUrl from "../utils/remove-query-from-url.mjs";
+import ReelCache from "../schema/reel-cache.schema.mjs";
 
 async function getHTML(url) {
   // Launch a headless browser instance
@@ -39,4 +41,50 @@ export async function getReelVideo(url) {
 
   // returns the direct video link
   return videoDirectLink;
+}
+
+export async function cacheReelInfo(url) {
+  const clean_url = removeQueryFromUrl(url);
+
+  let ReelInfo = undefined;
+  const ReelData = await ReelCache.findOne({ url: clean_url });
+
+  const ogAPIReqUrl =
+    `${process.env.OPEN_GRAPH_API_URL}?` +
+    new URLSearchParams({
+      url: clean_url,
+    });
+
+  console.log("OGURL:", ogAPIReqUrl);
+
+  const reelOpenGraph = await (
+    await fetch(
+      `${process.env.OPEN_GRAPH_API_URL}?` +
+        new URLSearchParams({
+          url: clean_url,
+        })
+    )
+  ).json();
+
+  if (ReelData) {
+    ReelInfo = {
+      title: reelOpenGraph.ogTitle,
+      url: clean_url,
+      description: reelOpenGraph.ogDescription,
+      thumbnail: reelOpenGraph.ogImage,
+      download_link: ReelData.download_link,
+    };
+  } else {
+    ReelInfo = {
+      title: reelOpenGraph.ogTitle,
+      url: clean_url,
+      description: reelOpenGraph.ogDescription,
+      thumbnail: reelOpenGraph.ogImage,
+      download_link: await getReelVideo(clean_url),
+    };
+
+    await ReelCache.create({ ...ReelInfo, dateCreated: Date.now() });
+  }
+
+  return ReelInfo;
 }
