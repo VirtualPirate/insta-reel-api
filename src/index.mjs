@@ -20,6 +20,10 @@ app.get("/", async (req, res) => {
   res.send(info);
 });
 
+app.get("/ping", () => {
+  res.send({ health: "fine" });
+});
+
 async function startServer() {
   mongoose.connect(process.env.MONGO_DATABASE_URL).then(() => {
     console.log("Connected to Database");
