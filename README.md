@@ -8,7 +8,7 @@ and their download links
 This application depends on the Opengraph-API:
 https://github.com/VirtualPirate/OpenGraph-API
 
-# Changes add
+# API Docs
 
 ### `GET` `/`
 
