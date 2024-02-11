@@ -14,10 +14,14 @@ app.use(express.json());
 app.use(cors({ origin: "*" }));
 
 app.get("/", async (req, res) => {
-  const url = req.query.url;
-  const info = await cacheReelInfo(url);
-  console.log(`[GET] ${url}`);
-  res.send(info);
+  try {
+    const url = req.query.url;
+    const info = await cacheReelInfo(url);
+    console.log(`[GET] ${url}`);
+    res.send(info);
+  } catch (error) {
+    res.send({ message: error.message });
+  }
 });
 
 app.get("/ping", (req, res) => {
